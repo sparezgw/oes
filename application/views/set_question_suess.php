@@ -4,9 +4,9 @@
 </head>
 <body>
 
-<h3>保存成功！</h3>
+<h3>娣诲姞鎴愬姛</h3>
 
-<p><?php echo anchor('question/set_question', '继续添加!'); ?></p>
+<p><?php echo anchor('question/set_question', '缁х画娣诲姞!'); ?></p>
 
 </body>
 </html>

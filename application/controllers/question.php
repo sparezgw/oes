@@ -11,31 +11,31 @@ class Question extends CI_Controller {
 	
 	function set_question(){
 	
-		$this->form_validation->set_rules('title', 'ÌâÄ¿', 'trim|required');
+		$this->form_validation->set_rules('title', 'é¢˜ç›®', 'trim|required');
 			
 	
 		
 		for($a=65,$num=1;$a<69;$a++,$num++){
 			$str=chr ($a);
-			$this->form_validation->set_rules('op'.$num,'Ñ¡Ïî'.$str,'trim|required');
+			$this->form_validation->set_rules('op'.$num,'é€‰é¡¹'.$str,'trim|required');
 		}
 		
 		
 		/*
-		$this->form_validation->set_rules('op1', 'Ñ¡ÏîA', 'trim|required');
-		$this->form_validation->set_rules('op2', 'Ñ¡ÏîB', 'trim|required');
-		$this->form_validation->set_rules('op3', 'Ñ¡ÏîC', 'trim|required');
-		$this->form_validation->set_rules('op4', 'Ñ¡ÏîD', 'trim|required');
+		$this->form_validation->set_rules('op1', 'é€‰é¡¹A', 'trim|required');
+		$this->form_validation->set_rules('op2', 'é€‰é¡¹B', 'trim|required');
+		$this->form_validation->set_rules('op3', 'é€‰é¡¹C', 'trim|required');
+		$this->form_validation->set_rules('op4', 'é€‰é¡¹D', 'trim|required');
 		*/
 		
-		$this->form_validation->set_rules('key','´ð°¸','trim|required');
+		$this->form_validation->set_rules('key','ç­”æ¡ˆ','trim|required');
 		
-		$this->form_validation->set_message('required', '±ØÐëÌîÐ´%s');
+		$this->form_validation->set_message('required', 'å¿…é¡»å¡«å†™%s');
 		
 		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
 		
 		if($this->form_validation->run() == FALSE){
-			//$data['error']="ÇëÌîÐ´ÏàÓ¦ÐÅÏ¢!";
+			//$data['error']="ç”¨æˆ·åå·²ç»å­˜åœ¨!";
 			$this->load->view('set_question_view');	
     	}else{
     		$title=$this->input->post('title');

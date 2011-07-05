@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Home_model extends CI_Model{
 	var $uName;
 	var $uPassword;
@@ -12,7 +12,7 @@ class Home_model extends CI_Model{
 		parent::__construct();
 	}
 	
-	//Ìí¼ÓÐÂÓÃ»§
+	//æ·»åŠ æ–°ç”¨æˆ·
 	function create(){
 		$uLast=data('Y-m-d H:i:s');
 		$this->db->set('uName',$this->uName);
@@ -26,7 +26,7 @@ class Home_model extends CI_Model{
 		return $this->db->insert('user');
 	}
 	
-	//²éÑ¯ÓÃ»§¡¢·µ»ØÓÃ»§ÐÅÏ¢
+	//æŸ¥è¯¢ç”¨æˆ·ã€è¿”å›žç”¨æˆ·ä¿¡æ¯
 	function check_user(){
 		$query=$this->db->get_where('user',array('uName'=>$this->uName,'uPassword'=>md5($this->uPassword)));
 		if($row=$query->row_array()){
@@ -35,7 +35,7 @@ class Home_model extends CI_Model{
 		return array();
 	}
 	
-	//²éÑ¯ÓÃ»§ÃûÊÇ·ñ´æÔÚ
+	//æŸ¥è¯¢ç”¨æˆ·åæ˜¯å¦å­˜åœ¨
 	function check_uName($uName){
 		$query=$this->db->get_where('user',array('uName'=>$uName));
 		if($row=$query->row_array()){
@@ -44,7 +44,7 @@ class Home_model extends CI_Model{
 		return false;
 	}
 	
-	//¸üÐÂÓÃ»§ÐÅÏ¢
+	//æ›´æ–°ç”¨æˆ·ä¿¡æ¯
 	function update($uID){
 		//$this->db->set('uName',$this->uName);
 		//$this->db->set('uPassword',$this->password);
@@ -59,7 +59,7 @@ class Home_model extends CI_Model{
 		return $this->db->update('user');
 	}
 	
-	//¸üÐÂÃÜÂë
+	//æ›´æ–°å¯†ç 
 	function update_pwd($uID,$uPassword){
 		$this->db->set('uPassword',md5($uPassword));
 		$this->db->where('uID',$uID);

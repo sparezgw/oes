@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-	/*µÇÂ¼¡¢×¢²á¡¢×¢Ïú*/
+	//ç™»å½•ã€æ³¨å†Œã€æ³¨é”€
 	class Home extends CI_Controller{
 		function Home(){
 			parent::__construct();
@@ -9,44 +9,44 @@
 			$data=array();
 		}
 		
-		//×¢²áÉú³ÉÑéÖ¤Âë
+		//æ³¨å†ŒéªŒè¯ç ç”Ÿæˆ
 		function yzm_img(){
 			$this->load->help('captcha');
 			code();
 		}
 		
-		//µÇÂ¼Éú³ÉÑéÖ¤Âë
+		//ç™»å½•éªŒè¯ç ç”Ÿæˆ
 		function yzm_img1(){
 			$this->load->help('captcha');
 			code();
 		}
 		
-		//×¢²áÑéÖ¤ÂëÑéÖ¤
+		//æ£€éªŒæ³¨å†ŒéªŒè¯ç 
 		function check_yzm(){
 			
 		}
 		
-		//µÇÂ¼ÑéÖ¤ÂëÑéÖ¤
+		//æ£€éªŒç™»å½•éªŒè¯ç 
 		function checl_yzm1(){
 			
 		}
 		
-		//×¢²á¹æÔòÑéÖ¤
+		//è®¾ç½®æ³¨å†Œè§„åˆ™
 		function set_save_form_rules(){
-			$rules['uName']=array('uName','ÓÃ»§Ãû', 'trim|required|min_length[4]|max_length[12]');
-			$rules['uPassword']=array('uPassword','ÃÜÂë','trim|required|matches[uPassconf]|md5');
-			$rules['uTruename']=array('uTruename','ÕæÊµÐÕÃû','trim|required|min_length[4]|max_length[12]');
-			$rules['uPassconf']=array('uPassconf','È·ÈÏÃÜÂë','trim|required|min_length[6]|max_length[16]');
-			$rules['uGender']=array('uGender','ÐÔ±ð','trim|required');
-			$rules['uBday']=array('uBday','³öÉúÄêÔÂ','trim|required');
-			//$rules['uInfo']=array('uInfo','¸öÈËÐÅÏ¢','trim|required');
-			$rules['uIdentify']=array('uidentify','Éí·Ý','trim|required');
+			$rules['uName']=array('uName','ï¿½Ã»ï¿½ï¿½ï¿½', 'trim|required|min_length[4]|max_length[12]');
+			$rules['uPassword']=array('uPassword','ï¿½ï¿½ï¿½ï¿½','trim|required|matches[uPassconf]|md5');
+			$rules['uTruename']=array('uTruename','ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½','trim|required|min_length[4]|max_length[12]');
+			$rules['uPassconf']=array('uPassconf','È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','trim|required|min_length[6]|max_length[16]');
+			$rules['uGender']=array('uGender','ï¿½Ô±ï¿½','trim|required');
+			$rules['uBday']=array('uBday','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','trim|required');
+			//$rules['uInfo']=array('uInfo','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢','trim|required');
+			$rules['uIdentify']=array('uidentify','ï¿½ï¿½ï¿½','trim|required');
 			
 			$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
 			
 		}
 		
-		//×¢²á¡¢±£´æ×¢²áÐÅÏ¢
+		//æ³¨å†Œã€ä¿å­˜æ³¨å†Œä¿¡æ¯
 		function register(){
 			//$this->check_yzm();
 			$uName=$this->input->post('uNname');
@@ -57,7 +57,7 @@
 			//$uInfo=$this->input->post('uInfo');
 			$uIdentify=$this->input->post('uIdentify');
 			
-			//ÒÑ¾­×Ô¶¯ÔØÈë
+			//å·²ç»åœ¨autoloadä¸­è½½å…¥
 			//$this->load->library('validation');
 			$this->set_save_form_rules();
 			if($this->validation->run()){
@@ -72,24 +72,27 @@
 				
 				/* $check_uName=$this->home_model->check_uName;
 				if($check_uName==false){
-					$data['error']='´ËÓÃ»§ÃûÒÑ¾­±»×¢²á';
+					$data['error']='ç”¨æˆ·åå·²ç»å­˜åœ¨';
 					redirect(home/index/regsiter)
 				} */
 				$this->home_model->create();
 				$uID = $this->db->insert_id();
 				
-				//¼ÓÈësession
+				//åŠ å…¥session
 				$user=array(
 					'uID'=>$uID,
 					'uTrueame'=>$Truename,
 					'uIdentify'=>$uIdentify,
 				);
 				$this->session->set-userdata($user);
+				redirect('index');
+			}else{
+				redirect('register');
 			}
 		}
 	
 		
-		//µÇÈë
+		//ç™»å…¥
 		function login(){
 			//$this->check_yzm1();
 			
@@ -117,7 +120,7 @@
 		}
 		
 		
-		//×¢Ïú
+		//æ³¨é”€
 		function logout(){
 			$this->session->sess_destory();
 			redirect('login');
