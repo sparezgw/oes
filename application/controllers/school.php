@@ -15,10 +15,9 @@ class School extends CI_Controller{
 		$this->form_validation->set_message('required', '必须填写%s');
 		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
 		
-		$this->set_save_form_rules();
-		if($this->validation->run()){
+		if($this->form_validation->run() == TRUE){
 			$this->load->model('school_model');
-			$this->login_model->uSchool=$uSchool;
+			$this->school_model->uSchool=$uSchool;
 			$this->school_model->add_school();
 			
 			redirect('index');
@@ -29,12 +28,61 @@ class School extends CI_Controller{
 	}
 	
 	//查询所有学校
-	function query_school(){
+	function list_school(){
 		$this->load->model('school_model');
-		$data['sName']=$this->school_model->query_school();
-		//$this->load->view('query_school_view',$data);
+		$data['sName']=$this->school_model->list_school();
+		$this->load->view('list_school_view',$data);
 	}
 	
+	//按学校名搜索
+	function search_school(){
+		$strname=$this->input->post('strname');
+		$this->form_validation->set_rules('stename','学校名','trim|required|min_length[6]');
+		$this->form_validation->set_message('required', '必须填写%s');
+		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
+		
+		if($this->form_validation->run() == TRUE){
+			$this->load->model('school_model');
+			$this->school_model->strname=$strname;
+			$data['sName']=$this->school_model->search_school();
+			$this->load->view('list_school_view',$data);
+		}else{
+			//redirect(search_school);
+		}
+	}
+	
+	//删除学校
+	function delete_school(){
+		//获取学校ID
+		$sID=$this->uri->segment(3);
+		
+		$this->load->model('school_model');
+		$this->school_model->sID=$sID;
+		$this->school_model->delete_school();		
+		
+	}
+	
+	//修改学校
+	function edit_school(){
+		$sID=$this->uri->segment(3);
+		$sName=$this->input->post('sName');
+		$this->form_validation->set_rules('sName','学校','trim|required|min_length[6]');
+		$this->form_validation->set_message('required', '必须填写%s');
+		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
+		
+		if($this->form_validation->run() == TRUE){
+			$this->laod->model('school_model');
+			$this->school_model->sID=$sID;
+			$this->school_model->sName=$sName;
+			$this->school_model->edit_school();
+			//$this->load->view('scuss_school_view',$data);
+			}else{
+				//redirect(search_school);
+		}
+		
+		
+		
+	}
 	
 	
 }

@@ -35,7 +35,7 @@ class Question extends CI_Controller {
 		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
 		
 		if($this->form_validation->run() == FALSE){
-			//$data['error']="用户名已经存在!";
+			
 			$this->load->view('set_question_view');	
     	}else{
     		$title=$this->input->post('title');
