@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+//登入、注册
 class Home_model extends CI_Model{
 	var $uName;
 	var $uPassword;

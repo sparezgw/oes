@@ -1,12 +1,15 @@
-#Wed Jul 06 00:26:07 CST 2011
+#Sat Jul 09 10:33:51 CST 2011
 eclipse.preferences.version=1
 encoding//application/config/autoload.php=utf-8
+encoding//application/controllers/action.php=utf-8
 encoding//application/controllers/home.php=utf-8
 encoding//application/controllers/question.php=utf-8
 encoding//application/controllers/school.php=utf-8
 encoding//application/models/home_model.php=utf-8
 encoding//application/models/question_model.php=utf-8
 encoding//application/models/school_model.php=utf-8
+encoding//application/views/add_notice_view.php=utf-8
+encoding//application/views/get_meg_view.php=utf-8
 encoding//application/views/query_question_view.php=utf-8
 encoding//application/views/set_question_suess.php=utf-8
 encoding//application/views/set_question_view.php=utf-8

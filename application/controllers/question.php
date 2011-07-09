@@ -1,44 +1,42 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+//题目
 class Question extends CI_Controller {
-	
 	function Question(){
 		parent::__construct();
 	}
 		
 	function index(){
-		
+		$data=array();
+    }
+    
+    
+    function set_question_form_rules($num){
+    	$row['qTypeID']=array('qTypeID','题目类型','required');
+    	$row['qSubjectID']=array('qSubjectID','题目科目','trim|required');
+    	$row['qTitle']=array('qTitle', '标题', 'required');
+    	
+    	for($i=1,$str_num=65;i<=$num;$i++,$str_num++){
+    		$str=chr ($str_num);
+    		$row['op'.$i]=array('op'.$i,'选项'.$str,'trim|required');
+    	}
+    	
+    	$row['qAnswers']=array('qAnswers','题目答案','trim|required');
+    	$row['aTages']=array('aTages','题目标签','required');
+    	$row['qRank']=array('aRank','题目难度','required');
+    	$row['qMemo']=array('qMemo','题目备注','trim|required');
     }
 	
-	function set_question(){
-	
-		$this->form_validation->set_rules('title', '题目', 'trim|required');
-			
-	
-		
-		for($a=65,$num=1;$a<69;$a++,$num++){
-			$str=chr ($a);
-			$this->form_validation->set_rules('op'.$num,'选项'.$str,'trim|required');
-		}
-		
-		
-		/*
-		$this->form_validation->set_rules('op1', '选项A', 'trim|required');
-		$this->form_validation->set_rules('op2', '选项B', 'trim|required');
-		$this->form_validation->set_rules('op3', '选项C', 'trim|required');
-		$this->form_validation->set_rules('op4', '选项D', 'trim|required');
-		*/
-		
-		$this->form_validation->set_rules('key','答案','trim|required');
-		
+	function set_question(){		
 		$this->form_validation->set_message('required', '必须填写%s');
-		
 		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
 		
-		if($this->form_validation->run() == FALSE){
+		$title=$this->input->post('title');
+		
+		
+		
+		$this->set_question_form_rules();
+		if($this->validation->run()==true){
 			
-			$this->load->view('set_question_view');	
-    	}else{
-    		$title=$this->input->post('title');
 		/*
     		for($a=1;$a<26;$a++){
     			$str='op'.$num;
