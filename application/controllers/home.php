@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //登录、注册、注销
 class Home extends CI_Controller{
+	
 	function Home(){
 		parent::__construct();
 	}
@@ -85,10 +86,16 @@ class Home extends CI_Controller{
 				'uIdentify'=>$uIdentify,
 			);
 			$this->session->set-userdata($user);
-			redirect('index');
+			//redirect('index');
 		}else{
-			redirect('register');
+			//redirect('register');
 		}
+	}
+	
+	function list_user(){
+		$this->load->model('home_model');
+		$data['query']=$this->home_model->list_user();
+		$this->load->view('list_user_view',$data);
 	}
 
 	
@@ -97,27 +104,47 @@ class Home extends CI_Controller{
 		//$this->check_yzm1();
 		
 		$uName=$this->input->post('uName');
-		$uPassword=$this->input->poast('uPassword');
+		$uPassword=$this->input->post('uPassword');
 		
-		$this->laod->model('home_model');
+		$this->load->model('home_model');
 		$this->home_model->uName=$uName;
-		$this->home_model->uPassword=$uPoassword;
-		$user=$this->home_model->check_user();
-		if($user){
-			$user=array(
-				'uID'=>$user['uID'],
-				'uTruename'=>$user['uTruename'],
-				'uIdentify'=>$user['uIdentify'],
-				'userin'=>TRUE,
-			);
-			$this->session->set_userdata($user);
+		$this->home_model->uPassword=$uPassword;
+		
+		$this->form_validation->set_rules('uName','用户名','trim|required');
+		$this->form_validation->set_rules('uPassword','密码','trim|required');
+		
+		
+		if($this->form_validation->run() == TRUE){
+			//$this->load->model('home_model');
+			if($this->home_model->check_name($uName)==FALSE){
+				echo "用户名不存在";
+			}else{
+				$query=$this->home_model->check_password($uName);
+				$row=$query->result();		
+				if($row[0]->uPassword!=$uPassword){
+					echo "密码错误";
+				}else{
+					echo "登录成功";
+					$user=$this->home_model->check_user();
+					if($user){
+						$user=array(
+									'uID'=>$user['uID'],
+									'uTruename'=>$user['uTruename'],
+									'uIdentify'=>$user['uIdentify'],
+									'userin'=>TRUE,
+						);
+					}
+					$this->session->set_userdata($user);
+				}			
+			}
 			
-			redirect('index');
+			
 		}else{
-			redirect('home/index/login');
+			$this->load->view('login_view');
 		}
-			
 	}
+	
+	
 	
 	
 	//注销
@@ -125,5 +152,6 @@ class Home extends CI_Controller{
 		$this->session->sess_destory();
 		redirect('login');
 	}
+	
 }
 ?>

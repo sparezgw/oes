@@ -6,52 +6,75 @@ class Notice extends CI_Controller{
 	
 	function index(){
 		$data=array();
-		$this->load->view('notice_view');
+		
 	}
-	
+	/* 
 	function set_nitice_form_rules(){
 		$row['nBody']=array('nBody','公告内容','trim|required');
-		//$row['nTime']=array('nTime','发布时间','required');
 		$row['nSchoolID']=array('nSchoolID', '所属学校', 'required');
 	}
-	
+	 */
 	function add_notice(){
-		$nBody=$this->input->post('nBody');
+		$nSchoolID=$this->input->post('nSchoolID');
 		$nTitle=$this->input->post('nTitle');
-		$nSchool=$this->input->post('nSchool');
+		$nBody=$this->input->post('nBody');
 		
-		$this->load->library('form_validation');
-		$this->set_nitice_form_rules();
-		if($this->form_validation->run()==TRUE){
+		$this->form_validation->set_rules('nSchoolID','所属学校','trim|required');
+		$this->form_validation->set_rules('nTitle','公告标题','trim|required');
+		$this->form_validation->set_rules('nBody','公告内容','trim|required');
+		
+		
+		if($this->form_validation->run() == TRUE){
 			$this->load->model('notice_model');
-			$this->notice_model->nBody=$nBody;
+			$this->notice_model->nSchoolID=$nSchoolID;
 			$this->notice_model->nTitle=$nTitle;
-			$this->notice_model->nSchool=$nSchool;
+			$this->notice_model->nBody=$nBody;	
 			$this->notice_model->add_notice();
 			
-			$data['url']='notice/list_notice';
+			$data['url']='list_notice';
 			$data['show']='添加成功';
-			$this->load->view('action',$data);
-			echo "成功";
+			$this->load->view('get_meg_view',$data);
+			
 		}else{
-			$this->load->view('notice_view');
-			echo "失败";
+			$this->load->view('add_notice_view');
+			
 		}
 	}
 	
 	function list_notice(){
-	
-	}
-	
-	function edit_notice(){
-		$nID=$this->url->segment(3);
-		$this->notice_model->nID=$nID;
+		$this->load->model('notice_model');
+		$data['query']=$this->notice_model->list_notice();
+		$this->load->view('list_notice_view',$data);
 	}
 	
 	function del_notice(){
+		$nID=$this->uri->segment(3);
+		$this->load->model('notice_model');
+		$this->notice_model->nID=$nID;
+		$query=$this->notice_model->del_notice();
 		
+		if($query){
+			$data['url']='../list_notice';
+			$data['show']='删除成功';
+			$this->load->view('get_meg_view',$data);
+		}else{
+			$data['url']='../list_notice';
+			$data['show']='删除失败';
+			$this->load->view('get_meg_view',$data);
+		}
+	
 	}
 	
+	function get_notice(){
+		$nID=$this->uri->segment(3);
+		$this->load->model('notice_model');
+		$this->notice_model->nID=$nID;
+		$data['query']=$this->notice_model->get_notice();
+		
+		$this->load->view('get_notice_view',$data);
+		
+		
+	}
 	
 }
 

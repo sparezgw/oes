@@ -1,0 +1,11 @@
+Development log
+
+2011.7.6 22:44
+
+1.登录、注册控制器（home.php）和模型(home_model.php)（待完善）；
+2.学校增加、删除、修改、搜索、查询 控制器(school.php)和模型(school_model)；
+3.增加跳转页面,控制器（action.php）、视图（get_meg_view.php）；
+
+2011.7.9 22:17
+1.完成school所有功能
+2.

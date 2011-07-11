@@ -27,6 +27,10 @@ class Home_model extends CI_Model{
 		return $this->db->insert('user');
 	}
 	
+	function list_user(){
+		return $this->db->get('user');
+	}
+	
 	//查询用户、返回用户信息
 	function check_user(){
 		$query=$this->db->get_where('user',array('uName'=>$this->uName,'uPassword'=>md5($this->uPassword)));
@@ -37,12 +41,17 @@ class Home_model extends CI_Model{
 	}
 	
 	//查询用户名是否存在
-	function check_uName($uName){
+	function check_name($uName){
 		$query=$this->db->get_where('user',array('uName'=>$uName));
 		if($row=$query->row_array()){
 			return true;
 		}
 		return false;
+	}
+	
+	//查询用户、返回密码
+	function check_password($uName){
+		return $this->db->get_where('user',array('uName'=>$uName));
 	}
 	
 	//更新用户信息
@@ -51,7 +60,7 @@ class Home_model extends CI_Model{
 		//$this->db->set('uPassword',$this->password);
 		$this->db->set('uTurename',$this->uTruename);
 		$this->db->set('uGender',$this->uGender);
-		$this->db->set('uBdat',$this->uBday);
+		$this->db->set('uBday',$this->uBday);
 		//$this->db->set('uInfo',$this->uInfo);
 		$this->db->set('uLast',$uLast);
 		$this->db->set('uIdentify',$this->uIdentify);

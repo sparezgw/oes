@@ -4,9 +4,9 @@
 
 <?php foreach($query->result() as $row):?>
 	<?php $sID=$row->sID;?>
-	<?php echo form_open('school/edit_school/'.$sID); ?>
-	<h5>学校名称</h5>
-	<input type="text" name="sName" value="<?php echo $row->sName;?>" size="50" />
+	<?php echo form_open('subject/edit_subject/'.$sID); ?>
+	<h5>科目名称</h5>
+	<input type="text" name="sTitle" value="<?php echo $row->sTitle;?>" size="50" />
 	<div><input type="submit" value="修改" /></div>
 	<?php echo form_close();?>
 <?php endforeach;?>

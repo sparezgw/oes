@@ -44,29 +44,25 @@ class School extends CI_Controller{
 		
 		if($this->form_validation->run() == TRUE){
 			$this->load->model('school_model');
-			//$this->school_model->sID=$sID;
+			$this->school_model->sID=$sID;
 			$this->school_model->sName=$sName;
-			$this->school_model->edit_school();
+			$this->school_model->edit_school($sID);
 			
-			$data['url']='list_school';
+			$data['url']='../list_school';
 			$data['show']='修改成功';
 			$this->load->view('get_meg_view',$data);
-		}else{
-			/* 
+		}else{			
 			$this->load->model('school_model');
-			$sID=$this->uri->segment(3);
-			$data['nName']=$this->school_model->get_school_name($sID);
-			  */
-			$this->load->view('edit_school_view');
+			$this->school_model->sID=$sID;
+			$data['query']=$this->school_model->get_school_name();
+			$this->load->view('edit_school_view',$data);
 		}
 	}
 	
 	//查询所有学校
 	function list_school(){
-		
 		$this->load->model('school_model');
 		$data['query']=$this->school_model->list_school();
-		//$data['query']=$this->db->get('school');
 		$this->load->view('list_school_view',$data);
 	}
 	
