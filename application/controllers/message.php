@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Message extends CI_Controller{
-	/* mRead：0 未阅读  1 已阅读*/
+	
 	function Message(){
 		parent::__construct();
 	}
@@ -29,11 +29,19 @@ class Message extends CI_Controller{
 			$this->message_model->mTitle=$mTitle;
 			$this->message_model->mBody=$mBody;
 			$this->message_model->mType=$mType;
-			$this->message_model->add_message();
+			$query=$this->message_model->add_message();
 			
-			$data['url']='list_all_message';
-			$data['show']='添加成功';
-			$this->load->view('get_meg_view',$data);
+			if($query){				
+				$data['url']='list_all_message';
+				$data['show']='添加成功';
+				$this->load->view('get_meg_view',$data);
+			}else{
+				$data['url']='list_all_message';
+				$data['show']='添加失败';
+				$this->load->view('get_meg_view',$data);
+			}
+			
+			
 		}else{
  			$this->load->view('add_message_view');
 		}
@@ -105,13 +113,19 @@ class Message extends CI_Controller{
 			$this->message_model->mBody=$mBody;
 			$this->message_model->mType=$mType;
 			
-			$this->message_model->reply_message($mID,$mPID);
-				
-			$data['url']='../../list_all_message';
-			$data['show']='回复成功';
-			$this->load->view('get_meg_view',$data);
-		}else{
+			$query=$this->message_model->reply_message($mID,$mPID);
 			
+			if($query){
+				$data['url']='../../list_all_message';
+				$data['show']='回复成功';
+				$this->load->view('get_meg_view',$data);
+			}else{
+				$data['url']='../../list_all_message';
+				$data['show']='回复失败';
+				$this->load->view('get_meg_view',$data);
+			}
+				
+		}else{
 			$this->load->model('message_model');
 			$this->message_model->mID=$mID;
 			$data['query']=$this->message_model->get_message();

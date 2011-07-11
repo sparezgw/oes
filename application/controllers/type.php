@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-//学校
+
 class Type extends CI_Controller{
 	function Type(){
 		parent::__construct();
@@ -64,10 +64,7 @@ class Type extends CI_Controller{
 		$data['query']=$this->type_model->list_type();
 		$this->load->view('list_type_view',$data);
 	}
-	
-	
-	
-	
+		
 	function del_type(){
 		
 		$tID=$this->uri->segment(3);

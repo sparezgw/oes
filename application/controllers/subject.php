@@ -15,11 +15,23 @@ class Subject extends CI_Controller{
 		if($this->form_validation->run() == TRUE){
 			$this->load->model('subject_model');
 			$this->subject_model->sTitle=$sTitle;
-			$this->subject_model->add_subject();
+			$query=$this->subject_model->add_subject();
+			$sID = $this->db->insert_id();
 			
-			$data['url']='list_subject';
-			$data['show']='添加成功';
-			$this->load->view('get_meg_view',$data);
+			if($query){
+				$lUserID=3;
+				$this->load->model('logbook_model');
+				$this->logbook_model->add_logbook($lUserID,'新建科目、ID='.$sID);
+								
+				$data['url']='list_subject';
+				$data['show']='添加成功';
+				$this->load->view('get_meg_view',$data);
+			}else{
+				$data['url']='list_subject';
+				$data['show']='添加失败';
+				$this->load->view('get_meg_view',$data);
+			}
+	
 		}else{
 			$this->load->view('add_subject_view');
 		}
@@ -36,11 +48,22 @@ class Subject extends CI_Controller{
 			$this->load->model('subject_model');
 			$this->subject_model->sID=$sID;
 			$this->subject_model->sTitle=$sTitle;
-			$this->subject_model->edit_subject($sID);
+			$query=$this->subject_model->edit_subject($sID);
 			
-			$data['url']='../list_subject';
-			$data['show']='修改成功';
-			$this->load->view('get_meg_view',$data);
+			if($query){
+				$lUserID=3;
+				$this->load->model('logbook_model');
+				$this->logbook_model->add_logbook($lUserID,'更新科目、ID='.$sID);
+								
+				$data['url']='../list_subject';
+				$data['show']='修改成功';
+				$this->load->view('get_meg_view',$data);
+			}else{
+				$data['url']='../list_subject';
+				$data['show']='修改失败';
+				$this->load->view('get_meg_view',$data);
+			}
+			
 		}else{			
 			$this->load->model('subject_model');
 			$this->subject_model->sID=$sID;
@@ -65,6 +88,10 @@ class Subject extends CI_Controller{
 		$this->subject_model->sID=$sID;
 		$query=$this->subject_model->del_subject();	
 		if($query){
+			$lUserID=3;
+			$this->load->model('logbook_model');
+			$this->logbook_model->add_logbook($lUserID,'删除科目、ID='.$sID);
+			
 			$data['url']='../list_subject';
 			$data['show']='删除成功';
 			$this->load->view('get_meg_view',$data);

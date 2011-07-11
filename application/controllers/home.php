@@ -1,5 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //登录、注册、注销
+/*0:网站管理员；1:学生；2:普通教师；3:学校管理员*/
 class Home extends CI_Controller{
 	
 	function Home(){

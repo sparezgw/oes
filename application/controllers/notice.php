@@ -8,12 +8,7 @@ class Notice extends CI_Controller{
 		$data=array();
 		
 	}
-	/* 
-	function set_nitice_form_rules(){
-		$row['nBody']=array('nBody','公告内容','trim|required');
-		$row['nSchoolID']=array('nSchoolID', '所属学校', 'required');
-	}
-	 */
+	
 	function add_notice(){
 		$nSchoolID=$this->input->post('nSchoolID');
 		$nTitle=$this->input->post('nTitle');
@@ -29,15 +24,24 @@ class Notice extends CI_Controller{
 			$this->notice_model->nSchoolID=$nSchoolID;
 			$this->notice_model->nTitle=$nTitle;
 			$this->notice_model->nBody=$nBody;	
-			$this->notice_model->add_notice();
+			$query=$this->notice_model->add_notice();
+			$nID = $this->db->insert_id();
 			
-			$data['url']='list_notice';
-			$data['show']='添加成功';
-			$this->load->view('get_meg_view',$data);
-			
+			if($query){
+				$lUserID=3;
+				$this->load->model('logbook_model');
+				$this->logbook_model->add_logbook($lUserID,'新建公告、ID='.$mID);
+				
+				$data['url']='list_notice';
+				$data['show']='添加成功';
+				$this->load->view('get_meg_view',$data);
+			}else{
+				$data['url']='list_notice';
+				$data['show']='添加失败';
+				$this->load->view('get_meg_view',$data);
+			}
 		}else{
 			$this->load->view('add_notice_view');
-			
 		}
 	}
 	
@@ -71,9 +75,7 @@ class Notice extends CI_Controller{
 		$this->notice_model->nID=$nID;
 		$data['query']=$this->notice_model->get_notice();
 		
-		$this->load->view('get_notice_view',$data);
-		
-		
+		$this->load->view('get_notice_view',$data);	
 	}
 	
 }

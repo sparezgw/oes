@@ -3,9 +3,11 @@
 class School extends CI_Controller{
 	function School(){
 		parent::__construct();
+		
 	}
 	
 	function index(){
+		
 		$data=array();
 	}
 	
@@ -20,11 +22,26 @@ class School extends CI_Controller{
 		if($this->form_validation->run() == TRUE){
 			$this->load->model('school_model');
 			$this->school_model->sName=$sName;
-			$this->school_model->add_school();
+			$query=$this->school_model->add_school();
 			
-			$data['url']='list_school';
-			$data['show']='添加成功';
-			$this->load->view('get_meg_view',$data);
+			//获取新建学校ID
+			$sID = $this->db->insert_id();
+			
+			if($query){
+				$lUserID=3;
+				$this->load->model('logbook_model');
+				$this->logbook_model->add_logbook($lUserID,'新建学校、ID='.$sID);
+				
+				$data['url']='list_school';
+				$data['show']='添加成功';
+				$this->load->view('get_meg_view',$data);
+			}else{
+				$data['url']='list_school';
+				$data['show']='添加失败';
+				$this->load->view('get_meg_view',$data);
+			}
+			
+			
 		}else{
 			$this->load->view('add_school_view');
 		}
@@ -46,11 +63,23 @@ class School extends CI_Controller{
 			$this->load->model('school_model');
 			$this->school_model->sID=$sID;
 			$this->school_model->sName=$sName;
-			$this->school_model->edit_school($sID);
+			$query=$this->school_model->edit_school($sID);
 			
-			$data['url']='../list_school';
-			$data['show']='修改成功';
-			$this->load->view('get_meg_view',$data);
+			if($query){
+				$lUserID=3;
+				$this->load->model('logbook_model');
+				$this->logbook_model->add_logbook($lUserID,'更新学校、ID='.$sID);
+				
+				$data['url']='../list_school';
+				$data['show']='修改成功';
+				$this->load->view('get_meg_view',$data);
+			}else{
+				$data['url']='../list_school';
+				$data['show']='修改失败';
+				$this->load->view('get_meg_view',$data);
+			}
+			
+			
 		}else{			
 			$this->load->model('school_model');
 			$this->school_model->sID=$sID;
@@ -77,6 +106,11 @@ class School extends CI_Controller{
 		$this->school_model->sID=$sID;
 		$query=$this->school_model->del_school();	
 		if($query){
+			
+			$lUserID=3;
+			$this->load->model('logbook_model');
+			$this->logbook_model->add_logbook($lUserID,'删除学校、ID='.$sID);
+						
 			$data['url']='../list_school';
 			$data['show']='删除成功';
 			$this->load->view('get_meg_view',$data);
@@ -86,28 +120,7 @@ class School extends CI_Controller{
 			$this->load->view('get_meg_view',$data);
 		}	
 		
-	}
-	
-	
-	
-	
-	//按学校名搜索
-	function search_school(){
-		$strname=$this->input->post('strname');
-		$this->form_validation->set_rules('stename','学校名','trim|required|min_length[6]');
-		$this->form_validation->set_message('required', '必须填写%s');
-		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
-	
-		if($this->form_validation->run() == TRUE){
-			$this->load->model('school_model');
-			$this->school_model->strname=$strname;
-			$data['sName']=$this->school_model->search_school();
-			$this->load->view('list_school_view',$data);
-		}else{
-			//redirect(search_school);
-		}
-	}
-	
+	}	
 }
 
 ?>
