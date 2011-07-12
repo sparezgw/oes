@@ -33,7 +33,7 @@ class Home_model extends CI_Model{
 	
 	//查询用户、返回用户信息
 	function check_user(){
-		$query=$this->db->get_where('user',array('uName'=>$this->uName,'uPassword'=>md5($this->uPassword)));
+		$query=$this->db->get_where('user',array('uName'=>$this->uName,'uPassword'=>$this->uPassword));
 		if($row=$query->row_array()){
 			return $row;
 		}

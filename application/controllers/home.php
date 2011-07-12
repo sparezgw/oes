@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //登录、注册、注销
-/*0:网站管理员；1:学生；2:普通教师；3:学校管理员*/
+//0:网站管理员；1:学生；2:普通教师；3:学校管理员
 class Home extends CI_Controller{
 	
 	function Home(){
@@ -127,6 +127,7 @@ class Home extends CI_Controller{
 				}else{
 					echo "登录成功";
 					$user=$this->home_model->check_user();
+					//print_r($user);
 					if($user){
 						$user=array(
 									'uID'=>$user['uID'],
@@ -135,6 +136,7 @@ class Home extends CI_Controller{
 									'userin'=>TRUE,
 						);
 					}
+					print_r($user);
 					$this->session->set_userdata($user);
 				}			
 			}

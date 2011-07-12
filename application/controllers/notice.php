@@ -1,15 +1,29 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+//公告
+//0:网站管理员；1:学生；2:普通教师；3:学校管理员
+//网站管理员、学校管理员能对学校进行增加、修改和删除
+
 class Notice extends CI_Controller{
+	
 	function Notice(){
 		parent::__construct();
+		if (!$this->session->userdata('userin')){
+			redirect('home/login');
+			exit();
+		}
 	}
 	
 	function index(){
-		$data=array();
-		
+		$data=array();		
 	}
 	
 	function add_notice(){
+		if ($this->session->userdata('uIdentify')!=WEB_ADMIN){
+			echo "您没有操作权限！";
+			exit();
+		}	
+		
+	
 		$nSchoolID=$this->input->post('nSchoolID');
 		$nTitle=$this->input->post('nTitle');
 		$nBody=$this->input->post('nBody');
@@ -42,7 +56,7 @@ class Notice extends CI_Controller{
 			}
 		}else{
 			$this->load->view('add_notice_view');
-		}
+		} 
 	}
 	
 	function list_notice(){

@@ -39,3 +39,12 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
+
+
+//定义用户权限全局变量
+//0:网站管理员；1:学生；2:普通教师；3:学校管理员
+define('WEB_ADMIN', 0);
+define('STUDENT_ID', 1);
+define('TEACHER',2);
+define('SCHOOL_ADMIN', 3);
+

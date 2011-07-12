@@ -1,126 +1,167 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+
 //学校
+//0:网站管理员；1:学生；2:普通教师；3:学校管理员
+//只有网站管理员才能对学校进行增加、修改和删除
 class School extends CI_Controller{
+	public $success,$message,$data,$params;
+	
 	function School(){
 		parent::__construct();
 		
-	}
-	
-	function index(){
-		
-		$data=array();
-	}
-	
-	//增加一个学校
-	function add_school(){
-		$sName=$this->input->post('sName');
-		$this->form_validation->set_rules('sName','学校','trim|required|min_length[3]');
-		$this->form_validation->set_message('required', '必须填写%s');
-		$this->form_validation->set_message('min_length','%s名称必须大于三个字!');
-		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
-		
-		if($this->form_validation->run() == TRUE){
-			$this->load->model('school_model');
-			$this->school_model->sName=$sName;
-			$query=$this->school_model->add_school();
-			
-			//获取新建学校ID
-			$sID = $this->db->insert_id();
-			
-			if($query){
-				$lUserID=3;
-				$this->load->model('logbook_model');
-				$this->logbook_model->add_logbook($lUserID,'新建学校、ID='.$sID);
-				
-				$data['url']='list_school';
-				$data['show']='添加成功';
-				$this->load->view('get_meg_view',$data);
-			}else{
-				$data['url']='list_school';
-				$data['show']='添加失败';
-				$this->load->view('get_meg_view',$data);
-			}
-			
-			
-		}else{
-			$this->load->view('add_school_view');
+		/* 
+		if (!$this->session->userdata('userin')){
+			redirect('home/login');
+			exit();
 		}
+		$uID=$this->session->userdata('uID');
+		$uIdentify=$this->session->userdata('uIDentify');
+		 */
 		
+		$this->success = false;
+		$this->message = '';
+		$this->data    = array();
+		$this->params  = array();		
 	}
 	
-	
-	//修改学校
-	function edit_school(){
-		$sID=$this->uri->segment(3);
-		$sName=$this->input->post('sName');
-		
-		$this->form_validation->set_rules('sName','学校','trim|required|min_length[3]');
-		$this->form_validation->set_message('required', '必须填写%s');
-		$this->form_validation->set_message('min_length','%s名称必须大于三个字!');
-		$this->form_validation->set_error_delimiters('<label style="color:red;">', '</label>');
-		
-		if($this->form_validation->run() == TRUE){
-			$this->load->model('school_model');
-			$this->school_model->sID=$sID;
-			$this->school_model->sName=$sName;
-			$query=$this->school_model->edit_school($sID);
-			
-			if($query){
-				$lUserID=3;
-				$this->load->model('logbook_model');
-				$this->logbook_model->add_logbook($lUserID,'更新学校、ID='.$sID);
-				
-				$data['url']='../list_school';
-				$data['show']='修改成功';
-				$this->load->view('get_meg_view',$data);
-			}else{
-				$data['url']='../list_school';
-				$data['show']='修改失败';
-				$this->load->view('get_meg_view',$data);
-			}
-			
-			
-		}else{			
-			$this->load->model('school_model');
-			$this->school_model->sID=$sID;
-			$data['query']=$this->school_model->get_school_name();
-			$this->load->view('edit_school_view',$data);
+	function get_request(){
+		$raw='';
+		$httpContent=fopen('php://input','r');
+		while($kb=fread($htpContent, 1024)){
+			$raw.=$kb;
 		}
+		$this->params=json_decode(stripslashes($raw));
 	}
 	
-	//查询所有学校
+	function to_json(){
+		return json_encode(array(
+			'success' => $this->success,
+			'message' => $this->message,
+			'data'    => $this->data
+		));
+	}
+		
 	function list_school(){
 		$this->load->model('school_model');
-		$data['query']=$this->school_model->list_school();
-		$this->load->view('list_school_view',$data);
+		$query=$this->school_model->list_school();
+		
+		if($query){
+			foreach ($query->result() as $row){
+				$item=array(
+					'sID'=>$row->sID,
+					'sName'=>$row->sName
+				);
+				$this->data[]=$item;
+			}
+			
+			$this->success = true;
+			$this->message = '读取学校列表成功';
+		}else{
+			$this->message = '读取学校列表失败';	
+		}
+		echo $this->to_json();
 	}
 	
 	
+	function add_school(){
+		/* 
+		if ($uIdentify!=WEB_ADMIN){
+			echo "您没有操作权限！";
+			exit();
+		}
+		 */
+		$this->get_request();
+		
+		$sName=$this->params->sName;
+		
+		$this->load-model('school_mdoel')=$sName;
+		$query=$this->school_model->add_school();
+		
+		if($query){
+			/* 
+			$sID = $this->db->insert_id();
+			$lUserID=$uID;
+			$this->load->model('logbook_model');
+			$this->logbook_model->add_logbook($lUserID,'新建学校,ID='.$sID);
+			 */
+			
+			$this->data =array(
+				'sID'  =>$sID,
+				'sName'=>$sName
+			);
+			$this->success = true;
+			$this->message = '学校添加成功！';
+		}else{
+			$this->message = '学校添加失败!';
+		}
+		echo $this->to_json();	
+		
+	}
 	
-	//删除学校
-	function del_school(){
-		//获取学校ID
-		$sID=$this->uri->segment(3);
+	
+	function edit_school(){
+		/* 
+		if ($this->session->userdata('uIdentify')!=WEB_ADMIN){
+			echo "您没有操作权限！";
+			exit();
+		}
+		 */
+		$this->get_request();
+		$sID=$this->params->sID;
+		$sName=$this->params->sName;
 		
 		$this->load->model('school_model');
 		$this->school_model->sID=$sID;
-		$query=$this->school_model->del_school();	
+		$this->school_model->sName=$sName;
+		
+		$query=$this->school_model->edit_school();
+		
 		if($query){
-			
-			$lUserID=3;
+			/* 
+			$lUserID=$uID;
+			$this->load->model('logbook_model');
+			$this->logbook_model->add_logbook($lUserID,'更新学校、ID='.$sID);
+			 */
+			$this->success = true;
+			$this->message = '修改成功！';
+		}else{
+			$this->message = '修改失败！';
+		}
+		
+		echo $this->to_json();
+	}
+	
+	function del_school(){
+		
+		/* if ($this->session->userdata('uIdentify')!=WEB_ADMIN){
+			echo "您没有操作权限！";
+			exit();
+		}
+		 */
+		
+		$this->get_request();
+		
+		$sID=$this->params->sID;
+		
+		$this->load->model('school_model');
+		$this->load->school_model->sID=$sID;
+		$query=$this->school_model->del_school();
+		
+		if($query){
+			/* 
+			$lUserID=$uID;
 			$this->load->model('logbook_model');
 			$this->logbook_model->add_logbook($lUserID,'删除学校、ID='.$sID);
-						
-			$data['url']='../list_school';
-			$data['show']='删除成功';
-			$this->load->view('get_meg_view',$data);
+			 */	
+			$this->success = true;
+			$this->message = '删除成功！';
 		}else{
-			$data['url']='../list_school';
-			$data['show']='删除失败';
-			$this->load->view('get_meg_view',$data);
-		}	
+			$this->message = '删除失败！';
+		}
 		
-	}	
+		echo $this->to_json();
+	}
 }
 
 ?>
