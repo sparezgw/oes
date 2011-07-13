@@ -27,20 +27,12 @@ class Subject_model extends CI_Model{
 	}
 	
 
-	function edit_subject($sID){
+	function edit_subject(){
 		$sTitle=$this->sTitle;
 		$data=array('sTitle'=>$sTitle);
 		$sID=$this->sID;		
 		$this->db->where('sID',$sID);
 		return $this->db->update('subject',$data);
-	}
-	
-
-	function get_subject_name(){
-		$sID=$this->sID;
-		$this->db->where('sID',$sID);
-		return $query=$this->db->get('subject');
-		
 	}
 }
 

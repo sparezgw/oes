@@ -14,8 +14,8 @@ class School extends MY_Controller{
 		if($query){
 			foreach ($query->result() as $row){
 				$item=array(
-					'sID'=>$row->sID,
-					'sName'=>$row->sName
+					'sID'   =>$row->sID,
+					'sName' =>$row->sName
 				);
 				$this->data[]=$item;
 			}

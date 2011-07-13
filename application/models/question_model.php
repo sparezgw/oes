@@ -37,7 +37,7 @@ class Question_model extends CI_Model{
 	}
 	
 	function list_question(){
-		
+		return $this->db->get('question');		
 	}
 	
 	function del_question(){

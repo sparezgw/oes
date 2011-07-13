@@ -18,6 +18,10 @@ class Notice extends MY_Controller{
 			foreach ($query->result() as $row){
 				$item=array(
 						'nID'=>$row->nID,
+						'nTitle'=>$row->nTitle,
+						'nBody'=>$row->nBody,
+						'nTitle'=>$row->nTitle,
+						'nSchoolID'=>$row->nSchoolID,
 				);
 				$this->data[]=$item;
 			}

@@ -2,18 +2,42 @@
 //试题表
 //所有试题保存后不能组卷、可以修改，提交后可以组卷、不能修改
 //只有老师才能新建题目
-class Question extends CI_Controller {
+class Question extends MY_Controller {
 	public $success,$message,$data,$params;
 	
 	function Question(){
 		parent::__construct();
 	}
 	
-	function get_user(){
-		return uIDentify;
-	}
-		
 	function list_question(){
+		$this->load->model('question_model');
+		$query=$this->question_model->list_question();
+		
+		if($query){
+			foreach ($query->result() as $row){
+				$item=array(
+					'qID'       =>$row->qID,
+					'qTypeID'   =>$row->qTypeID,
+					'qSubjectID'=>$row->qSubjectID,
+					'qTitle'    =>$row->qTitle,
+					'qOptions'  =>$row->qOptions,
+					'qAnswers'  =>$row->qAnswers,
+					'qTags'     =>$row->qTags,
+					'qRank'     =>$row->qRank,
+					'qLimit'    =>$row->qLimit,
+					'qPublic'   =>$row->qPublic,
+					'qState'    =>$row->qState, 
+					'qMemo'     =>$row->qMemo
+				);
+				$this->data[]=$item;
+			}
+			$this->success = true;
+			$this->message = '读取试题列表成功';
+		}else{
+			$this->message = '读取试题列表失败';
+		}
+		
+		echo $this->to_json();
 		
 	}
 	
@@ -45,19 +69,19 @@ class Question extends CI_Controller {
 		$qState=$this->params->qState;
 		$qMemo=$this->params->qMemo;
 		
-		
+		$this->laod->model('question_model');
 
-		$this->load->model('qusetion_mdoel')=$qTypeID;
-		$this->load->model('qusetion_mdoel')=$qSubject;
-		$this->load->model('qusetion_mdoel')=$qTitle;
-		$this->load->model('qusetion_mdoel')=$qOptions;
-		$this->load->model('qusetion_mdoel')=$qAnswers;
-		$this->load->model('qusetion_mdoel')=$qTags;
-		$this->load->model('qusetion_mdoel')=$qRank;
-		$this->load->model('qusetion_mdoel')=$qLimit;
-		$this->load->model('qusetion_mdoel')=$qPublic;
-		$this->load->model('qusetion_mdoel')=$qState;
-		$this->load->model('qusetion_mdoel')=$qMemo;
+		$this->qusetion_mdoel->qTypeID=$qTypeID;
+		$this->qusetion_mdoel->qSubject=$qSubject;
+		$this->qusetion_mdoel->qTitle=$qTitle;
+		$this->qusetion_mdoel->qQption=$qOptions;
+		$this->qusetion_mdoel->qAnswers=$qAnswers;
+		$this->qusetion_mdoel->qTags=$qTags;
+		$this->qusetion_mdoel->qRank=$qRank;
+		$this->qusetion_mdoel->qLimit=$qLimit;
+		$this->qusetion_mdoel->qPublic=$qPublic;
+		$this->qusetion_mdoel->qState=$qState;
+		$this->qusetion_mdoel->qMemo=$qMemo;
 		
 		$query=$this->question_model->add_school();
 		
@@ -72,7 +96,7 @@ class Question extends CI_Controller {
 			$this->success = true;
 			$this->message = '试题添加成功！';
 		}else{
-			$this->message = '学校添加失败!';
+			$this->message = '试题添加失败!';
 		}
 		
 		echo $this->to_json();
@@ -95,10 +119,10 @@ class Question extends CI_Controller {
 			//获取出卷人ID
 			$question_author=$user_list['author'];
 			
-			if($question_author==$uID){
+			if($question_author==$this->session->userdata('uID')){
 				$this->load->model('question_model');
-				$this->load->question_model->qID=$qID;
-				$query=$this->question->del_question();
+				$this->question_model->qID=$qID;
+				$query=$this->question_model->del_question();
 					
 				if($query){
 					$this->success = true;
@@ -116,13 +140,6 @@ class Question extends CI_Controller {
 		}
 	}
 	
-	function edit_qurstion(){
-		$this->get_request();
-		
-		$sID=$this->params->sID;
-		$sName=$this->params->sName;
-		
-		
-	}
+	
 }
 ?>

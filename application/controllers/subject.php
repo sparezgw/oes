@@ -1,45 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //科目表
 //只有网站管理员才能对科目进行增加、修改和删除
-class Subject extends CI_Controller{
-	public $success,$message,$data,$params;
-	
+class Subject extends MY_Controller{
 	function Subject(){
 		parent::__construct();
-		
-		/*
-		if (!$this->session->userdata('userin')){
-		redirect('home/login');
-		exit();
-		}
-		$uID=$this->session->userdata('uID');
-		$uIdentify=$this->session->userdata('uIDentify');
-		*/
-		
-		$this->success = false;
-		$this->message = '';
-		$this->data    = array();
-		$this->params  = array();
 	}
-	
-	function get_request(){
-		$raw='';
-		$httpContent=fopen('php://input','r');
-		while($kb=fread($htpContent, 1024)){
-			$raw.=$kb;
-		}
-		$this->params=json_decode(stripslashes($raw));
-	}
-	
-	function to_json(){
-		return json_encode(array(
-				'success' => $this->success,
-				'message' => $this->message,
-				'data'    => $this->data
-		));
-	}
-	
-	
+
 	function list_subject(){
 		$this->load->model('subject_model');
 		$query=$this->subject_model->list_subject();
@@ -72,7 +38,8 @@ class Subject extends CI_Controller{
 	
 		$sTitle=$this->params->sTitle;
 	
-		$this->load-model('subject_mdoel')=$sTitle;
+		$this->load->model('subject_model');
+		$this->subject_model->sTitle=$sTitle;
 		$query=$this->subject_model->add_subject();
 	
 		if($query){
@@ -85,7 +52,7 @@ class Subject extends CI_Controller{
 				
 			$this->data =array(
 					'sID'  =>$sID,
-					'sName'=>$sName
+					'sTitle'=>$sTitle
 			);
 			$this->success = true;
 			$this->message = '科目添加成功！';
@@ -143,7 +110,7 @@ class Subject extends CI_Controller{
 		$sID=$this->params->sID;
 	
 		$this->load->model('subject_model');
-		$this->load->subject_model->sID=$sID;
+		$this->subject_model->sID=$sID;
 		$query=$this->subject_model->del_subject();
 	
 		if($query){

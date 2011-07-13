@@ -132,5 +132,7 @@ class Message extends CI_Controller{
 			$this->load->view('reply_message_view',$data);
 		}
 	}
+	
+	
 }
 
