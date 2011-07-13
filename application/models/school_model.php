@@ -28,7 +28,7 @@ class School_model extends CI_Model{
 	}
 	
 	//修改学校
-	function edit_school($sID){
+	function edit_school(){
 		$sName=$this->sName;
 		$data=array('sName'=>$sName);
 		$sID=$this->sID;		

@@ -112,7 +112,7 @@ class School extends MY_Controller{
 		$sID=$this->params->sID;
 		
 		$this->load->model('school_model');
-		$this->load->school_model->sID=$sID;
+		$this->school_model->sID=$sID;
 		$query=$this->school_model->del_school();
 		
 		if($query){
