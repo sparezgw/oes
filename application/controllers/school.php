@@ -40,7 +40,7 @@ class School extends MY_Controller{
 		
 		$sName=$this->params->sName;
 		
-		$this->load-model('school_mdoel');
+		$this->load->model('school_mdoel');
 		$this->school_model->sName=$sName;
 		$query=$this->school_model->add_school();
 		
