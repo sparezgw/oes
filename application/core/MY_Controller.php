@@ -5,20 +5,30 @@ class MY_Controller extends CI_Controller{
 	function MY_Controller(){
 		parent::__construct();
 		
-		//检测是否存在登入session。如果有，返回用户ID和权限ID。如果没有，返回登入。
-		if (!$this->session->userdata('userin')){
-			redirect('home/login');
-			exit();
-		}
-		$uID=$this->session->userdata('uID');
-		$uIdentify=$this->session->userdata('uIDentify');
-		
-		        
-				
 		$this->success = false;
 		$this->message = '';
 		$this->data    = array();
 		$this->params  = array();
+		
+// 		$this->is_logined();
+	}
+	
+	//检测是否存在登入session。如果有，返回用户ID和权限ID。如果没有，返回登入。
+	function is_logined() {
+		if (!$this->session->userdata('userin')){
+// 			redirect('home/login');
+			$this->message = '登录失败，请重新登录！';
+			echo $this->to_json();
+			exit();
+		}
+	}
+	
+	function get_identify() {
+		echo json_encode(array(
+			'id' => $this->session->userdata('uID'),
+			'identify' => $this->session->userdata('uIdentify'),
+			'name' => $this->session->userdata('uTruename')
+		));
 	}
 	
 	function get_request(){

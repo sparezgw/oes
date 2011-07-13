@@ -62,7 +62,7 @@ class School extends MY_Controller{
 		}else{
 			$this->message = '学校添加失败!';
 		}
-		echo $this->to_json();	
+		echo $this->to_json();
 		
 	}
 	

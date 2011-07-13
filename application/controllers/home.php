@@ -136,7 +136,7 @@ class Home extends CI_Controller{
 									'userin'=>TRUE,
 						);
 					}
-					print_r($user);
+					//print_r($user);
 					$this->session->set_userdata($user);
 				}			
 			}
