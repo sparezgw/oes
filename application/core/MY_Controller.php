@@ -24,7 +24,7 @@ class MY_Controller extends CI_Controller{
 	function get_request(){
 		$raw='';
 		$httpContent=fopen('php://input','r');
-		while($kb=fread($htpContent, 1024)){
+		while($kb=fread($httpContent, 1024)){
 			$raw.=$kb;
 		}
 		$this->params=json_decode(stripslashes($raw));
