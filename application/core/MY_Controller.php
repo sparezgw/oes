@@ -32,12 +32,14 @@ class MY_Controller extends CI_Controller{
 	}
 	
 	function get_request(){
-		$raw='';
-		$httpContent=fopen('php://input','r');
-		while($kb=fread($httpContent, 1024)){
-			$raw.=$kb;
-		}
-		$this->params=json_decode(stripslashes($raw));
+// 		$raw='';
+// 		$httpContent=fopen('php://input','r');
+// 		while($kb=fread($httpContent, 1024)){
+// 			$raw.=$kb;
+// 		}
+// 		$this->params=json_decode(stripslashes($raw));
+		$this->params=json_decode($raw);
+		$raw=file_get_contents('php://input','r');
 	}
 	
 	function to_json(){
