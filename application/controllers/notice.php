@@ -44,7 +44,7 @@ class Notice extends CI_Controller{
 			if($query){
 				$lUserID=3;
 				$this->load->model('logbook_model');
-				$this->logbook_model->add_logbook($lUserID,'新建公告、ID='.$mID);
+				$this->logbook_model->add_logbook($lUserID,'新建公告、ID='.$nID);
 				
 				$data['url']='list_notice';
 				$data['show']='添加成功';

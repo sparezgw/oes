@@ -1,47 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-
 //学校
 //0:网站管理员；1:学生；2:普通教师；3:学校管理员
 //只有网站管理员才能对学校进行增加、修改和删除
-class School extends CI_Controller{
-	public $success,$message,$data,$params;
-	
+class School extends MY_Controller{	
 	function School(){
 		parent::__construct();
-		
-		/* 
-		if (!$this->session->userdata('userin')){
-			redirect('home/login');
-			exit();
-		}
-		$uID=$this->session->userdata('uID');
-		$uIdentify=$this->session->userdata('uIDentify');
-		 */
-		
-		$this->success = false;
-		$this->message = '';
-		$this->data    = array();
-		$this->params  = array();		
+	}
+
+	function get_user(){
+		return uIDentify;
 	}
 	
-	function get_request(){
-		$raw='';
-		$httpContent=fopen('php://input','r');
-		while($kb=fread($htpContent, 1024)){
-			$raw.=$kb;
-		}
-		$this->params=json_decode(stripslashes($raw));
-	}
-	
-	function to_json(){
-		return json_encode(array(
-			'success' => $this->success,
-			'message' => $this->message,
-			'data'    => $this->data
-		));
-	}
-		
 	function list_school(){
 		$this->load->model('school_model');
 		$query=$this->school_model->list_school();
@@ -79,8 +48,9 @@ class School extends CI_Controller{
 		$query=$this->school_model->add_school();
 		
 		if($query){
-			/* 
+			
 			$sID = $this->db->insert_id();
+			/*
 			$lUserID=$uID;
 			$this->load->model('logbook_model');
 			$this->logbook_model->add_logbook($lUserID,'新建学校,ID='.$sID);
