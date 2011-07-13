@@ -30,12 +30,18 @@ class Notice_model extends CI_Model{
 		return $this->db->delete('notice');
 	}
 	
-	
-	function get_notice(){
-		$this->db->where('nID',$this->nID);
-		return $this->db->get('notice');
+	function edit_notice(){
+		$nTime=date('Y-m-d H:i:s');
+		$nSchool=$this->nSchoolID;
+		$nBody=$this->nBody;
+		$nTitle=$this->nTitle;
+		$data=array('nSchool'=>$nSchool,'nTime'=>$nTime,'nBody'=>$nBody,'nTitle'=>$nTitle);
+		
+		$nID=$this->nID;
+		
+		$this->db->where('nID',$nID);
+		return $this->db->update('notice',$data);
 	}
-	
 	
 }
 

@@ -47,17 +47,17 @@ class Question extends CI_Controller {
 		
 		
 
-		$this->load-model('qusetion_mdoel')=qTypeID;
-		$this->load-model('qusetion_mdoel')=qSubject;
-		$this->load-model('qusetion_mdoel')=qTitle;
-		$this->load-model('qusetion_mdoel')=qOptions;
-		$this->load-model('qusetion_mdoel')=qAnswers;
-		$this->load-model('qusetion_mdoel')=qTags;
-		$this->load-model('qusetion_mdoel')=qRank;
-		$this->load-model('qusetion_mdoel')=qLimit;
-		$this->load-model('qusetion_mdoel')=qPublic;
-		$this->load-model('qusetion_mdoel')=qState;
-		$this->load-model('qusetion_mdoel')=qMemo;
+		$this->load->model('qusetion_mdoel')=$qTypeID;
+		$this->load->model('qusetion_mdoel')=$qSubject;
+		$this->load->model('qusetion_mdoel')=$qTitle;
+		$this->load->model('qusetion_mdoel')=$qOptions;
+		$this->load->model('qusetion_mdoel')=$qAnswers;
+		$this->load->model('qusetion_mdoel')=$qTags;
+		$this->load->model('qusetion_mdoel')=$qRank;
+		$this->load->model('qusetion_mdoel')=$qLimit;
+		$this->load->model('qusetion_mdoel')=$qPublic;
+		$this->load->model('qusetion_mdoel')=$qState;
+		$this->load->model('qusetion_mdoel')=$qMemo;
 		
 		$query=$this->question_model->add_school();
 		
