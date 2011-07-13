@@ -6,10 +6,6 @@ class School extends MY_Controller{
 	function School(){
 		parent::__construct();
 	}
-
-	function get_user(){
-		return uIDentify;
-	}
 	
 	function list_school(){
 		$this->load->model('school_model');
@@ -44,7 +40,8 @@ class School extends MY_Controller{
 		
 		$sName=$this->params->sName;
 		
-		$this->load-model('school_mdoel')=$sName;
+		$this->load-model('school_mdoel');
+		$this->school_model->sName=$sName;
 		$query=$this->school_model->add_school();
 		
 		if($query){

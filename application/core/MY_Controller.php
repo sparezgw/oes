@@ -12,6 +12,8 @@ class MY_Controller extends CI_Controller{
 		}
 		$uID=$this->session->userdata('uID');
 		$uIdentify=$this->session->userdata('uIDentify');
+		
+		        
 				
 		$this->success = false;
 		$this->message = '';
