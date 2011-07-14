@@ -8,13 +8,62 @@ class Tag extends CI_Controller{
 		
 	function list_tag(){
 		$this->load->model('tag_model');
-		$data['query']=$this->tag_model->list_tag();
-		$this->load->view('list_tag_view',$data);
+		$query=$this->tag_model->list_tag();
+		
+		if($query){
+			foreach ($query->result() as $row){
+				$item=array(
+					'tID'         =>$row->tID,
+					'tUserID'     =>$row->tUserID,
+					'tName'       =>$row->tName,
+					'tQuestionID' =>$row->tQuestionID,
+					'tPaperID'    =>$row->tPaperID,
+					'tCount'      =>$row->tCount
+				);
+				$this->data[]=$item;
+			}
+				
+			$this->success = true;
+			$this->message = '读取标签列表成功';
+		}else{
+			$this->message = '读取标签列表失败';
+		}
+		echo $this->to_json();
+		}
+	}
+	
+	//列出某人全部标签
+	function list_tag_uid(){
+		$tUserID=$this->session->userdata('uID');
+		
+		$this->load->model('tag_model');
+		$this->tag_model->tUserID=$tUserID;
+		$query=$this->tag_model->list_tag_uid();
+		
+		if($query){
+			foreach ($query->result() as $row){
+				$item=array(
+					'tID'         =>$row->tID,
+					'tUserID'     =>$row->tUserID,
+					'tName'       =>$row->tName,
+					'tQuestionID' =>$row->tQuestionID,
+					'tPaperID'    =>$row->tPaperID,
+					'tCount'      =>$row->tCount
+				);
+				$this->data[]=$item;
+			}
+		
+			$this->success = true;
+			$this->message = '读取标签列表成功';
+		}else{
+			$this->message = '读取标签列表失败';
+		}
+		echo $this->to_json();
+		
 	}
 	
 	//创建云标签
-	function getcloud_tag( $data = array(), $minFontSize = 12, $maxFontSize = 30 )
-	{
+	function getcloud_tag( $data = array(), $minFontSize = 12, $maxFontSize = 30 ){
 		$minimumCount=min(array_values($data));
 		$maximumCount=max(array_values($data));
 		$spread=$maximumCount-$minimumCount;

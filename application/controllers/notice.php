@@ -17,11 +17,12 @@ class Notice extends MY_Controller{
 		if($query){
 			foreach ($query->result() as $row){
 				$item=array(
-						'nID'=>$row->nID,
-						'nTitle'=>$row->nTitle,
-						'nBody'=>$row->nBody,
-						'nTitle'=>$row->nTitle,
-						'nSchoolID'=>$row->nSchoolID,
+					'nID'=>$row->nID,
+					'nSchoolID'=>$row->nSchoolID,
+					'nTitle'=>$row->nTitle,
+					'nBody'=>$row->nBody,
+					'nTime'=>$row->nTime,
+						
 				);
 				$this->data[]=$item;
 			}

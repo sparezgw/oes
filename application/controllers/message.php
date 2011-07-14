@@ -1,15 +1,158 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Message extends CI_Controller{
-	
+class Message extends MY_Controller{
 	function Message(){
 		parent::__construct();
 	}
-	
-	function index(){
-		$data=array();
+
+	//返回所有消息列表
+	function list_all_message(){
+		$this->load->model('message_model');
+		$query=$this->message_model->list_all_message();
+		
+		if($query){
+			foreach ($query->result() as $row){
+				$item=array(
+					'mID'   =>$row->mID,
+					'mFrom' =>$row->mFrom,
+					'mTo'   =>$row->mTo,
+					'mTitle'=>$row->mTitle,
+					'mBody' =>$row->mBody,
+					'mPID'  =>$row->mPID,
+					'mTime' =>$row->mTime,
+					'mRead' =>$row->mRead,
+					'mType' =>$row->mType
+				);
+				$this->data[]=$item;
+			}
+				
+			$this->success = true;
+			$this->message = '读取所有消息列表成功';
+		}else{
+			$this->message = '读取所有消息列表失败';
+		}
+		
+		echo $this->to_json();
 	}
 	
 	function add_message(){
+		$this->get_request();
+		
+		$mID=$this->params->mID;
+		//$mFrom=$this->params->mFrom;
+		$mFrom=$this->session->userdata('uID');
+		$mTo=$this->params->mTo;
+		$mTitle=$this->params->mTitle;
+		$mBody=$this->params->mBody;
+		$mPID=$this->params->mPID;
+		//$mTime=$this->params->mTime;
+		//$mRead=$this->params->mRead;
+		$mType=$this->params->mType;
+		
+		$this->load->model('message_model');
+		
+		$this->message_mdeol->mID=$mID;
+		$this->message_model->mFrom=$mFrom;
+		$this->message_model->mTo=$mTo;
+		$this->message_model->tTitle=$mTitle;
+		$this->message_model->mBody=$mBody;
+		$this->message_model->mPID=$mPID;
+		//$this->message_model->mTime=$mTime;
+		//$this->message_model->mRead=$mRead;
+		$this->message_model->mRead=$mType;
+		
+		$query=$this->message_model->add_message();
+		
+		if($query){
+			$mID = $this->db->insert_id();
+			$this->data =array(
+				'mID'  =>$mID,
+			);
+			
+			$this->success = true;
+			$this->message = '发布留言成功！';
+		}else{
+			$this->message = '发布留言失败!';
+		}
+		
+			echo $this->to_json();	
+		
+	}
+	
+	function del_message(){
+		$this->get_request();
+		
+		$mID=$this->params->mID;
+		
+		$this->load->model('message_model');
+		$this->message_model->mID=$mID;
+		$query=$this->message_model->del_message();
+		
+		if($query){
+			$this->success = true;
+			$this->message = '删除成功！';
+		}else{
+			$this->message = '删除失败！';
+		}
+			
+		echo $this->to_json();		
+	}
+	
+	//根据用户名，查看所有第一次收到的消息
+	function list_to_message_first(){
+		$mTo=$this->session->userdata('uID');
+		$mPID=0;
+		
+		$this->load->model('message_model');
+		$this->message_model->mTo=$mTo;
+		$this->message_model->mPID=$mPID;
+		$query=$this->message_model->list_to_message_first();
+		
+		if($query){
+			$this->success = true;
+			$this->message = '查看消息成功！';
+		}else{
+			$this->message = '查看消息失败！';
+		}	
+	}
+	
+	//根据用户名，查看所有第一次发出的消息
+	function list_from_message_first(){
+		$mFrom=$this->session->userdata('uID');
+		$mPID=0;
+		
+		$this->load->model('message_model');
+		$this->message_model->mFrom=$mFrom;
+		$this->message_model->mPID=$mPID;
+		$query=$this->message_model->list_to_message_first();
+		
+		if($query){
+			$this->success = true;
+			$this->message = '查看消息成功！';
+		}else{
+			$this->message = '查看消息失败！';
+		}
+	}
+	
+	//根据某条消息、查看所有相应的留言
+	function list_reply(){
+		$this->get_request();
+		
+		$mID=$this->params->mID;
+		
+		$this->load->model('message_model');
+		$this->message_model->mID=$mID;
+		$query=$this->message_model->list_reply();
+		
+		if($query){
+			$this->success = true;
+			$this->message = '查看消息成功！';
+		}else{
+			$this->message = '查看消息失败！';
+		}
+	}
+	
+	
+	/* function add_message(){
 		$mFrom=$this->input->post('mFrom');
 		$mTo=$this->input->post('mTo');
 		$mTitle=$this->input->post('mTitle');
@@ -132,7 +275,7 @@ class Message extends CI_Controller{
 			$this->load->view('reply_message_view',$data);
 		}
 	}
-	
+	 */
 	
 }
 

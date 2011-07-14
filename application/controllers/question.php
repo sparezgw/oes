@@ -45,28 +45,30 @@ class Question extends MY_Controller {
 		
 		$this->get_request();
 		
-		//增加标签
 		$qTags=$this->params->qTags;
+		$qState=$this->params->qState;
+		$uID=$this->session->userdata('uID');
 		
-		/* $qTages_query=$this->add_tag($qTags);
-		if($qTages_query==false){
-			$this->success = false;
-			$this->message = '增加标签失败';
+		if($qState==0){
+			//保存试题不能保存标签
+			$qTags=null;
 		}else{
-			$this->success = true;
-			$this->message = '增加标签成功';
-			$qTags=$qTages_query;
-		} */
+			//提交以后才能保存标签
+			$this->load->library('MY_tag');
+			$qTage_id_arr=$this->MY_tag->add_tag($qTage,$uID);
+		}
 		
+				
 		$qTypeID=$this->params->qTypeID;
 		$qSubjectID=$this->params->qSubject;
 		$qTitle=$this->params->qTitle;
 		$qOptions=$this->params->qOptions;
 		$qAnswers=$this->params->qAnswers;
+// 		$qTags=$this->params->qTags;
 		$qRank=$this->params->qRank;
 		$qLimit=$this->params->qLimit;
 		$qPublic=$this->params->qPublic;
-		$qState=$this->params->qState;
+// 		$qState=$this->params->qState;
 		$qMemo=$this->params->qMemo;
 		
 		$this->laod->model('question_model');
@@ -76,7 +78,9 @@ class Question extends MY_Controller {
 		$this->qusetion_mdoel->qTitle=$qTitle;
 		$this->qusetion_mdoel->qQption=$qOptions;
 		$this->qusetion_mdoel->qAnswers=$qAnswers;
-		$this->qusetion_mdoel->qTags=$qTags;
+		
+		$this->qusetion_mdoel->qTags=json_encode($qTage_id_arr);
+		
 		$this->qusetion_mdoel->qRank=$qRank;
 		$this->qusetion_mdoel->qLimit=$qLimit;
 		$this->qusetion_mdoel->qPublic=$qPublic;
@@ -88,7 +92,13 @@ class Question extends MY_Controller {
 		if($query){
 			$qID = $this->db->insert_id();
 			
-			//将标签数增加一
+			
+			if($qState==1){
+				//提交以后才能保存标签数增加一，并且在标签中加入相应tQuertionID
+				$this->load->library('MY_tag');
+				$this->MY_tag->add_tag($qTage_id_arr,$uID,$qID);			
+			}
+			
 			
 			$this->data =array(
 				'qID'  =>$qID,

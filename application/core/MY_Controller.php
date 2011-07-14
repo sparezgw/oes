@@ -50,52 +50,6 @@ class MY_Controller extends CI_Controller{
 		));
 	}
 	
-	function add_tag($tags){
-		//分隔成单个标签
-		$tName=explode(" ", $tags);
-		//计算标签个数
-		$num=count($tName);
-		
-		$flag=true;
-		$tagsID=array();
-		
-		$this->load->model('tag_model');
-		$this->tag_model->tUserID=$uID;
-		
-		for($i=0;$i<$num;$i++){
-			$this->tag_model->tName=$tName[$i];
-			
-			$tag_id=$this->tag_model->check_tag($tUserID,$tName[$i]);
-			
-			if(empty($tag_id)){
-				//此用户的此标签不存在,添加该标签.
-				$query=$this->tag_model->add_tag();
-				if($query){
-					$tID = $this->db->insert_id();
-					array_push($tagsID,$tID);
-				}else{
-					$flag=false;
-				}
-			}else{
-				//此用户的此标签已经存在,返回该标签ID
-				$this->load->model('tag_model');
-				array_push($tagsID,$tag_id);				
-			}
-		}
-		
-		if($flag==false){
-			return false;
-		}else{
-			return $tagsID;
-		}
-		
-	}
-	
-	function add_tags_one(){
-		
-	}
-	
-	
 	
 }
 
