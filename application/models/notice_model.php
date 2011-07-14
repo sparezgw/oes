@@ -21,8 +21,20 @@ class Notice_model extends CI_Model{
 		return $this->db->insert('notice');
 	}
 	
-	function list_notice(){
-		return $this->db->get('notice');
+	function list_notice($identify){
+		if($identify==ADMIN){
+			$this->db->select('notice.*, school.sName');
+			$this->db->from('notice');
+			$this->db->join('school', 'notice.nSchoolID = school.sID', 'left');
+			$this->db->order_by('nSchoolID asc, nTime asc');
+			$query = $this->db->get();
+			return $query;
+		}else{
+			$this->db->where('nSchoolID',0);
+			$this->db->or_where('nSchoolID',$this->nSchoolID);
+			$this->db->order_by('nSchoolID asc, nTime asc');
+			return $this->db->get('notice');
+		}
 	}
 	
 	function del_notice(){

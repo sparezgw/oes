@@ -26,6 +26,7 @@ class MY_Controller extends CI_Controller{
 	function get_identify() {
 		echo json_encode(array(
 			'id' => $this->session->userdata('uID'),
+			'sid' => $this->session->userdata('uSchoolID'),
 			'identify' => $this->session->userdata('uIdentify'),
 			'name' => $this->session->userdata('uTruename')
 		));
@@ -38,8 +39,8 @@ class MY_Controller extends CI_Controller{
 // 			$raw.=$kb;
 // 		}
 // 		$this->params=json_decode(stripslashes($raw));
-		$this->params=json_decode($raw);
 		$raw=file_get_contents('php://input','r');
+		$this->params=json_decode($raw);
 	}
 	
 	function to_json(){

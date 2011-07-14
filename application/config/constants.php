@@ -42,9 +42,9 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
 //定义用户权限全局变量
-//0:网站管理员；1:学生；2:普通教师；3:学校管理员
-define('WEB_ADMIN', 0);
-define('STUDENT_ID', 1);
-define('TEACHER',2);
-define('SCHOOL_ADMIN', 3);
-
+//0:学生；1:普通教师；2:学校管理员；3:网站管理员
+//STUDENT:学生；TEACHER:普通教师；SCHOOLADMIN:学校管理员；ADMIN:网站管理员
+define('STUDENT', 0);
+define('TEACHER', 1);
+define('SCHOOLADMIN', 2);
+define('ADMIN', 3);
